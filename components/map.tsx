@@ -56,8 +56,8 @@ export default function Map() {
 
   return (
     <div className="container">
-      <div className="controls">
-        <h1>Commute?</h1>
+      <div className="controls flex flex-col gap-2.5">
+        <h1 className="mb-2">Commute?</h1>
         <Places
           setOffice={(position) => {
             setOffice(position);
