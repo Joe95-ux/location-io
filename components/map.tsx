@@ -10,6 +10,10 @@ import {
 } from "@react-google-maps/api";
 import Places from "./places";
 import Distance from "./distance";
+import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { useIsMobile } from "@/hooks/use-mobile";
+import Logo from "./logo";
+import { cn } from "@/lib/utils";
 
 type LatLngLiteral = google.maps.LatLngLiteral;
 type DirectionsResult = google.maps.DirectionsResult;
@@ -17,7 +21,9 @@ type MapOptions = google.maps.MapOptions;
 
 export default function Map() {
   const [office, setOffice] = useState<LatLngLiteral>();
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const mapRef = useRef<google.maps.Map | null>(null);
+  const isMobile = useIsMobile();
   const [directions, setDirections] = useState<DirectionsResult>();
   const center = useMemo<LatLngLiteral>(
     () => ({ lat: 43.45, lng: -80.49 }),
@@ -54,9 +60,21 @@ export default function Map() {
     );
   };
 
+  const handleSidebar = ()=>{
+    setIsSidebarOpen( prev => !prev);
+  }
+
   return (
     <div className="container">
-      <div className="controls flex flex-col gap-2.5">
+      <div className={cn("controls flex flex-col gap-2.5 transition-all duration-300 ease-in-out", !isSidebarOpen && "sm-controls")}>
+        <div className="flex items-center relative">
+          <div className="absolute top-[50%] right-[0px] cursor-pointer p-2 hover:bg-slate-600 transition-all hover:rounded-full duration-300" onClick={handleSidebar}>
+          {!isSidebarOpen && <PanelLeftClose size={18} className="text-slate-500 hover:text-slate-200"/>}
+          {isSidebarOpen && <PanelLeftOpen size={18} className="text-slate-500 hover:text-slate-200"/>}
+        </div>
+        <Logo isSidebarOpen={isSidebarOpen}/>
+        </div>
+        
         <h1 className="mb-2">Commute?</h1>
         <Places
           setOffice={(position) => {
@@ -67,7 +85,7 @@ export default function Map() {
         {!office && <p>Enter the address of your office.</p>}
         {directions && <Distance leg={directions.routes[0].legs[0]} />}
       </div>
-      <div className="map">
+      <div className={cn("map transition-all duration-300 ease-in-out", !isSidebarOpen && "small-screen-with")}>
         <GoogleMap
           zoom={10}
           center={center}

@@ -146,9 +146,13 @@ a {
 
 .controls {
   width: 20%;
-  padding: 1rem;
+  padding: 1.5rem;
   background: #14161a;
   color: #fff;
+}
+
+.sm-controls .controls{
+  width: 35px;
 }
 
 .controls input {
@@ -164,12 +168,17 @@ a {
   width: 80%;
   height: 100vh;
 }
+.small-screen-width .map{
+  width: calc(100vw - 35px);
+}
 
 .highlight {
   font-size: 1.25rem;
   font-weight: bold;
 }
-
+.btm-border{
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
 .combobox-input {
   width: 100%;
   padding: 0.5rem;
