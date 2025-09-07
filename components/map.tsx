@@ -98,15 +98,15 @@ export default function Map() {
         </div>
 
         {isSidebarOpen && (
-          <div className="flex flex-col gap-4">
-            <h1>Commute?</h1>
+          <div className={`flex flex-col gap-4 transition-transform duration-200 ease-linear ${isSidebarOpen ? "translate-x-0 opacity-100": "-translate-x-full opacity-0"}`}>
+            <h1 className="whitespace-nowrap">Commute?</h1>
             <Places
               setOffice={(position) => {
                 setOffice(position);
                 mapRef.current?.panTo(position);
               }}
             />
-            {!office && <p>Enter the address of your office.</p>}
+            {!office && <p className="whitespace-nowrap">Enter the address of your office.</p>}
             {directions && <Distance leg={directions.routes[0].legs[0]} />}
           </div>
         )}
