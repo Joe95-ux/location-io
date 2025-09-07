@@ -10,7 +10,7 @@ import {
 } from "@react-google-maps/api";
 import Places from "./places";
 import Distance from "./distance";
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import Logo from "./logo";
 import { cn } from "@/lib/utils";
@@ -21,7 +21,7 @@ type MapOptions = google.maps.MapOptions;
 
 export default function Map() {
   const [office, setOffice] = useState<LatLngLiteral>();
-  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
   const mapRef = useRef<google.maps.Map | null>(null);
   const isMobile = useIsMobile();
   const [directions, setDirections] = useState<DirectionsResult>();
@@ -60,32 +60,64 @@ export default function Map() {
     );
   };
 
-  const handleSidebar = ()=>{
-    setIsSidebarOpen( prev => !prev);
-  }
+  const handleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
 
   return (
-    <div className="container">
-      <div className={cn("controls flex flex-col gap-2.5 transition-all duration-300 ease-in-out", !isSidebarOpen && "sm-controls")}>
-        <div className="flex items-center relative">
-          <div className="absolute top-[50%] right-[0px] cursor-pointer p-2 hover:bg-slate-600 transition-all hover:rounded-full duration-300" onClick={handleSidebar}>
-          {!isSidebarOpen && <PanelLeftClose size={18} className="text-slate-500 hover:text-slate-200"/>}
-          {isSidebarOpen && <PanelLeftOpen size={18} className="text-slate-500 hover:text-slate-200"/>}
+    <div className={cn("container", isMobile && "container-mobile")}>
+      <div
+        className={cn(
+          "controls h-full flex flex-col gap-4 transition-[left,right,width] duration-200 ease-linear",
+          !isSidebarOpen && !isMobile && "sm-controls",
+          isMobile && "controls-full"
+        )}
+      >
+        <div className="flex justify-between items-center gap-2 w-full py-6 btm-border  mb-3">
+          {!isMobile && (
+            <div
+              className="cursor-pointer order-1 p-2 hover:bg-slate-600 transition-all hover:rounded-full duration-300"
+              onClick={handleSidebar}
+            >
+              {!isSidebarOpen && (
+                <PanelLeftClose
+                  size={18}
+                  className="text-slate-500 hover:text-slate-200"
+                />
+              )}
+              {isSidebarOpen && (
+                <PanelLeftOpen
+                  size={18}
+                  className="text-slate-500 hover:text-slate-200"
+                />
+              )}
+            </div>
+          )}
+
+          <Logo isSidebarOpen={isSidebarOpen} />
         </div>
-        <Logo isSidebarOpen={isSidebarOpen}/>
-        </div>
-        
-        <h1 className="mb-2">Commute?</h1>
-        <Places
-          setOffice={(position) => {
-            setOffice(position);
-            mapRef.current?.panTo(position);
-          }}
-        />
-        {!office && <p>Enter the address of your office.</p>}
-        {directions && <Distance leg={directions.routes[0].legs[0]} />}
+
+        {isSidebarOpen && (
+          <div className="flex flex-col gap-4">
+            <h1>Commute?</h1>
+            <Places
+              setOffice={(position) => {
+                setOffice(position);
+                mapRef.current?.panTo(position);
+              }}
+            />
+            {!office && <p>Enter the address of your office.</p>}
+            {directions && <Distance leg={directions.routes[0].legs[0]} />}
+          </div>
+        )}
       </div>
-      <div className={cn("map transition-all duration-300 ease-in-out", !isSidebarOpen && "small-screen-with")}>
+      <div
+        className={cn(
+          "map transition-[left,right,width] duration-200 ease-linear",
+          !isSidebarOpen && !isMobile && "small-screen-width",
+          isMobile && isSidebarOpen && "map-full"
+        )}
+      >
         <GoogleMap
           zoom={10}
           center={center}
