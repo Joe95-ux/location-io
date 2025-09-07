@@ -70,7 +70,7 @@ export default function Map() {
         className={cn(
           "controls h-full flex flex-col gap-4 transition-[left,right,width] duration-200 ease-linear",
           !isSidebarOpen && !isMobile && "sm-controls",
-          isMobile && "controls-full"
+          isMobile && "controls-full overflow-y-scroll"
         )}
       >
         <div className="flex justify-between items-center gap-2 w-full py-6 btm-border  mb-3">
