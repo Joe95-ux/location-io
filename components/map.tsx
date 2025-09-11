@@ -98,7 +98,7 @@ export default function Map() {
         </div>
 
         <div
-          className={`flex flex-col gap-4 z-2 min-w-[276px] transition-transform duration-200 ease-linear ${
+          className={`flex flex-col gap-4 z-2 min-w-[250px] transition-transform duration-200 ease-linear ${
             isSidebarOpen ? "translate-x-0 opacity-100" : "slide-in"
           }`}
         >
