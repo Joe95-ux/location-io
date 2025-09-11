@@ -68,7 +68,7 @@ export default function Map() {
     <div className={cn("container", isMobile && "container-mobile")}>
       <div
         className={cn(
-          "controls h-full flex flex-col gap-4 transition-[left,right,width] duration-200 ease-linear",
+          "controls h-full z-10 flex flex-col gap-4 transition-[left,right,width] duration-200 ease-linear",
           !isSidebarOpen && !isMobile && "sm-controls",
           isMobile && "controls-full overflow-y-scroll"
         )}
@@ -97,19 +97,21 @@ export default function Map() {
           <Logo isSidebarOpen={isSidebarOpen} />
         </div>
 
-        {isSidebarOpen && (
-          <div className={`flex flex-col gap-4 transition-transform duration-200 ease-linear ${isSidebarOpen ? "translate-x-0 opacity-100": "-translate-x-full opacity-0"}`}>
-            <h1 className="whitespace-nowrap">Commute?</h1>
-            <Places
-              setOffice={(position) => {
-                setOffice(position);
-                mapRef.current?.panTo(position);
-              }}
-            />
-            {!office && <p>Enter the address of your office.</p>}
-            {directions && <Distance leg={directions.routes[0].legs[0]} />}
-          </div>
-        )}
+        <div
+          className={`flex flex-col gap-4 z-2 min-w-[276px] transition-transform duration-200 ease-linear ${
+            isSidebarOpen ? "translate-x-0 opacity-100" : "slide-in"
+          }`}
+        >
+          <h1 className="whitespace-nowrap">Commute?</h1>
+          <Places
+            setOffice={(position) => {
+              setOffice(position);
+              mapRef.current?.panTo(position);
+            }}
+          />
+          {!office && <p>Enter the address of your office.</p>}
+          {directions && <Distance leg={directions.routes[0].legs[0]} />}
+        </div>
       </div>
       <div
         className={cn(

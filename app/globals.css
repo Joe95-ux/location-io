@@ -171,6 +171,11 @@ a {
   border: none;
 }
 
+.slide-in{
+  transform: translateX(-150%);
+  transition: transform 200ms ease-in-out;
+  opacity: 0;
+}
 .map-container {
   width: 100%;
   height: 100vh;
